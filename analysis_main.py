@@ -1,12 +1,17 @@
 from fastqc import fastqc
-#from samfile import analysis
+from samfile import analysis
 import argparse
 
 
 def main(indir, outdir, samfile, nthreads, batch=False):
-    badfiles,errors, out= fastqc.fastqc_runner(indir, outdir,batch=batch)
+    _,_, out= fastqc.fastqc_runner(indir, outdir,batch=batch)
     totalSeq = fastqc.summaryCollector(outdir)
     print('received Total Sequences:',str(totalSeq))
+
+    paironecount, pairtwocount, pairextracount = analysis.samanalysis(samfile)
+    sumall = paironecount+pairtwocount+pairextracount
+    print('Samfile sequences count: ',str(sumall))
+
 
 
 if __name__ == "__main__":
