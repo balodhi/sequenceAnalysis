@@ -1,16 +1,25 @@
 from fastqc import fastqc
 from samfile import analysis
 import argparse
+import os
 
 
 def main(indir, outdir, samfile, nthreads, batch=False):
-    _,_, out= fastqc.fastqc_runner(indir, outdir,batch=batch)
-    totalSeq = fastqc.summaryCollector(outdir)
+    #_,_, out= fastqc.fastqc_runner(indir, outdir,batch=batch)
+    pairEnd = True
+    totalSeq = fastqc.summaryCollector(os.path.join(outdir,'QC'))
     print('received Total Sequences:',str(totalSeq))
-
     paironecount, pairtwocount, pairextracount = analysis.samanalysis(samfile)
     sumall = paironecount+pairtwocount+pairextracount
+    totalSeq = float(totalSeq)
+    if pairEnd:
+       #print('asdfadsfad'+str(float(pairtwocount)/float(totalSeq)))
+       print('Uniquelty mapped '+ str(round(float((pairtwocount)/(totalSeq))*100.0,3)))
+       print('Broken '+ str(round(float((paironecount)/totalSeq)*100.0,3)))
+       print('Multimapped '+ str(round(float(pairextracount/totalSeq)*100.0,3)))
+    
     print('Samfile sequences count: ',str(sumall))
+    #print('paired end borken count',str(paironecount))
 
 
 

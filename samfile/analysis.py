@@ -43,6 +43,7 @@ if __name__ == "__main__":
 
     print('#'*50)
     print('Total reads: ',str(sumall),'\n')
+    pairEnd = True
     if pairEnd:
         print("PairEnd",'\n')
         print('Uniquely mapped reads: ',str(pairtwocount), ' ', str(round(float(pairtwocount/sumall)*100.0,3)),'%%','\n')
